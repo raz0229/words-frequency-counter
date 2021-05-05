@@ -25,19 +25,25 @@ public class WordsFrequencyCounter {
 			temp += c;
 		}
 
-		temp = temp.replaceAll("[^a-zA-Z0-9]", " "); //removes special characters from String
+		temp = temp.replaceAll("[^a-zA-Z0-9]", " ").toLowerCase(); //removes special characters from String
 		return temp.split("\\s+"); //returns array of all the words
 	}
 	
 	public void writeToFile(String[] list) {
 		
+		ArrayList<String> temp = new ArrayList<String>();
 		for (int i = 0; i < list.length; i++) {
 			try{    
 	             FileOutputStream fout=new FileOutputStream(TARGET, true);  //appends  
 	             //String str = getWordFrequency(list[i], list) + "\n";
 	             String str = list[i] + " - " + getWordFrequency(list[i], list) + " \n";
-	             fout.write(str.getBytes());   
-	             fout.close();    
+	             
+	             // Skip if the word appears more than once
+	             if (!temp.contains(list[i])) {
+		             fout.write(str.getBytes());   
+		             fout.close();  
+	             } 
+	             temp.add(list[i]);
 	             
 	            } catch(Exception e){
 	            		System.out.println(e);
@@ -68,6 +74,7 @@ public class WordsFrequencyCounter {
 		}
 		return frequency;
 	}
+	 
 	
 	public static void main(String[] args) {
 		 try{    
